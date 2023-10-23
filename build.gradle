@@ -45,6 +45,6 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.3.2'
 }
 
-tasks.jar {
-    archiveFileName.set("Face.jar")
+bootJar {
+    archiveFileName.set("application-plain.jar")
 }
