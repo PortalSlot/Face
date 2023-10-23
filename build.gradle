@@ -7,8 +7,8 @@ plugins {
 group 'fr.konoashi.face'
 version '0.9.0'
 
-/*compileJava.options.fork = true
-compileJava.options.forkOptions.executable = 'C:\\Program Files\\Java\\jdk-18.0.2.1\\bin\\javac.exe'*/
+compileJava.options.fork = true
+compileJava.options.forkOptions.executable = 'C:\\Users\\Guilh\\.jdks\\azul-11.0.15\\bin\\javac.exe'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -45,3 +45,6 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.3.2'
 }
 
+tasks.jar {
+    archiveFileName.set("Face.jar")
+}
