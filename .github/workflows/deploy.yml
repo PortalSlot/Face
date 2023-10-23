@@ -30,7 +30,7 @@ jobs:
           cd Face/
           git pull origin master
           git status
-          gradle build
+          gradlew build
           cd build/libs/
           java -processname face -jar Face.jar
           
