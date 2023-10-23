@@ -25,7 +25,7 @@ jobs:
         script: |
           cd
           cd ProcessManager/
-          java -jar process_manager.jar face
+          java -jar ProcessManager.jar face
           cd
           cd Face/
           git pull origin master
