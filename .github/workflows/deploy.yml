@@ -25,7 +25,7 @@ jobs:
         script: |
           cd
           cd ProcessManager/
-          java -jar ProcessManager.jar face
+          java -jar ProcessManager.jar Face
           cd
           cd Face/
           git pull origin master
@@ -33,5 +33,5 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build
           cd build/libs/
-          java -processname face -jar Face.jar
+          java -jar Face.jar
           
