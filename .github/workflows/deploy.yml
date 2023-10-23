@@ -23,6 +23,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 56127
         script: |
+          cd
+          cd ProcessManager/
+          java -jar process_manager.jar face
+          cd
           cd Face/
           git pull origin master
           git status
+          gradle build
+          cd build/libs/
+          java -processname face -jar Face.jar
+          
