@@ -46,7 +46,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
                 String username = packetBuffer.readStringFromBuffer(16);
                 server.setUsername(username);
                 loginSuccess();
-                new ConnEstablishedC2P(username, server).call(); //Conn between fake server and bot client must be init here
+                new ConnEstablishedC2P(username, server, server.getProxyServer()).call(); //Conn between fake server and bot client must be init here
                 this.server.setState(ProtocolState.PLAY);
                 server.getProxyServer().getClientsConnectedOnProxy().add(server); //Conn established
 

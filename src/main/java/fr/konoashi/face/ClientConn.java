@@ -77,7 +77,7 @@ public class ClientConn {
 
     public void sendToServer(ByteBuf packet) {
         //Proxy ID used to recognize which proxy has been used
-        new SendPacket(this.getUsername(), proxyServer.getProxyId(), packet).call();
+        new SendPacket(this.getUsername(), proxyServer.getProxyId(), packet, this.getProxyServer()).call();
     }
 
     /*public void setUsername(String username) {
