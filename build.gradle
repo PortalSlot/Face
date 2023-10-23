@@ -46,5 +46,5 @@ dependencies {
 }
 
 bootJar {
-    archiveFileName.set("application-plain.jar")
+    archiveFileName.set("Face.jar")
 }
