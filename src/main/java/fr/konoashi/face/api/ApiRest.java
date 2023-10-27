@@ -18,10 +18,10 @@ public class ApiRest {
 
     public static Map<String, Face> sessions = new HashMap<>();
 
-    @PostMapping(value = "/startProxy")
+    @PostMapping(value = "/startFace")
     public String startProxyServer(@RequestBody JSONObject rawdata) throws IOException {
 
-        Face face = new Face(Integer.parseInt(rawdata.get("listenPort").toString()), rawdata.get("proxyId").toString(), Integer.parseInt(rawdata.get("hubId").toString()));
+        Face face = new Face(Integer.parseInt(rawdata.get("listenPort").toString()), rawdata.get("proxyId").toString(), Integer.parseInt(rawdata.get("hubId").toString()), rawdata.get("motd").toString(), Integer.parseInt(rawdata.get("slots").toString()), rawdata.get("version").toString(), Integer.parseInt(rawdata.get("protocol").toString()));
         EventManager.register(new Event());
         new Thread(face::run).start();
         //Start a websocket and send the code to access this Face instance

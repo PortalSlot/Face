@@ -31,14 +31,26 @@ public class Face {
         private EventLoopGroup group;
         private String proxyId;
         private int hubId;
+
+        private int slots;
+
+        private String motd;
+
+        private String version;
+
+        private int protocol;
         private List<ClientConn> clientsConnectedOnProxy = new ArrayList<>();
 
         static final EventExecutorGroup group2 = new DefaultEventExecutorGroup(16);
 
-        public Face(int listenPort, String proxyId, int hubId) {
+        public Face(int listenPort, String proxyId, int hubId, String motd, int slots, String version, int protocol) {
             this.listenPort = listenPort;
             this.proxyId = proxyId;
             this.hubId = hubId;
+            this.motd = motd;
+            this.slots = slots;
+            this.version = version;
+            this.protocol = protocol;
         }
 
 
@@ -94,6 +106,22 @@ public class Face {
 
     public int getHubId() {
         return hubId;
+    }
+
+    public int getSlots() {
+        return slots;
+    }
+
+    public String getMotd() {
+        return motd;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public int getProtocol() {
+        return protocol;
     }
 
     public List<ClientConn> getClientsConnectedOnProxy() {

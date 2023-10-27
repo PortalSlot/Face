@@ -54,17 +54,24 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
         } else if (this.server.getState() == ProtocolState.STATUS) {
             if (packetId == 0x00) {
                 String icon = new String(Files.readAllBytes(Paths.get("icon.txt")));
+                String motd = "\\\u00a7d            PortalSlot Proxy\\u00a7c [" + this.server.getProxyServer().getVersion() +"]\\u00a7r\\n\\u00a7b                Hub #"+String.format("%02d", this.server.getProxyServer().getHubId())+"\\u00a7c |\\u00a7e Id #"+ this.server.getProxyServer().getProxyId() + "\\u00a75";
+                switch (this.server.getProxyServer().getMotd()) {
+                    case "2b2t":
+                        motd = "\\\u00a7d            PortalSlot Proxy\\u00a7c [" + this.server.getProxyServer().getVersion() +"]\\u00a7r\\n\\u00a7b                Hub #"+String.format("%02d", this.server.getProxyServer().getHubId())+"\\u00a7c |\\u00a7e Id #"+ this.server.getProxyServer().getProxyId() + "\\u00a75";
+                    case "hypixel":
+                        motd = "\\\u00a7d            PortalSlot Proxy\\u00a7c [" + this.server.getProxyServer().getVersion() +"]\\u00a7r\\n\\u00a7b                Hub #"+String.format("%02d", this.server.getProxyServer().getHubId())+"\\u00a7c |\\u00a7e Id #"+ this.server.getProxyServer().getProxyId() + "\\u00a75";
+                }
                 String serverInfo = "{\n" +
                         "    \"version\": {\n" +
-                        "        \"name\": \"1.8.8\",\n" +
-                        "        \"protocol\": 47\n" +
+                        "        \"name\": \"" + this.server.getProxyServer().getVersion() +"\",\n" +
+                        "        \"protocol\": " + this.server.getProxyServer().getProtocol() +"\n" +
                         "    },\n" +
                         "    \"players\": {\n" +
-                        "        \"max\": 1,\n" +
+                        "        \"max\": " + this.server.getProxyServer().getSlots()+",\n" +
                         "        \"online\": " + this.server.getProxyServer().getClientsConnectedOnProxy().size() +"\n" +
                         "    },\n" +
                         "    \"description\": {\n" +
-                        "        \"text\": \"\\\u00a7d            PortalSlot Proxy\\u00a7c [1.8.8-1.8.9]\\u00a7r\\n\\u00a7b                Hub #"+String.format("%02d", this.server.getProxyServer().getHubId())+"\\u00a7c |\\u00a7e Id #"+ this.server.getProxyServer().getProxyId() + "\\u00a75 \"\n" +
+                        "        \"text\": \""+ motd +"\"\n" +
                         "    },\n" +
                         "    \"favicon\": \""+ icon +"\"\n" +
                         "}";
