@@ -4,7 +4,7 @@ name: Deploy
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ production ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,12 +26,4 @@ jobs:
           cd
           cd ProcessManager/
           java -jar ProcessManager.jar Face
-          cd
-          cd Face/
-          git pull origin master
-          git status
-          chmod +x ./gradlew
-          ./gradlew build
-          cd build/libs/
-          java -jar Face.jar
           
