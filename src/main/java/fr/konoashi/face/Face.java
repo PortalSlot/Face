@@ -68,6 +68,7 @@ public class Face {
                         .childHandler(new ChannelInitializer<SocketChannel>() {
                             @Override
                             public void initChannel(SocketChannel ch) throws Exception {
+                                new LoggingHandler(LogLevel.INFO);
                                 ChannelPipeline p = ch.pipeline();
                                 ClientConn player = new ClientConn(ch, Face.this);
                                 System.out.println("New Channel: " + ch.toString());

@@ -33,7 +33,6 @@ public class BackToClientWS extends TextWebSocketHandler {
 
         if (ApiRest.sessions.get(requestJson.get("proxyId").toString()) != null) {
             System.out.println(session.getId());
-            System.out.println("mais wesh");
             Map<Face, String> value = new HashMap<>();
             value.put(ApiRest.sessions.get(requestJson.get("proxyId").toString()), requestJson.get("username").toString());
             sessions.put(session, value);

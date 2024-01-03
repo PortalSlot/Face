@@ -2,6 +2,7 @@ package fr.konoashi.face.api;
 
 import fr.konoashi.face.event.SubscribeEvent;
 import fr.konoashi.face.event.impl.ConnEstablishedC2P;
+import fr.konoashi.face.event.impl.Disconnect;
 import fr.konoashi.face.event.impl.SendPacket;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.TextMessage;
@@ -22,6 +23,18 @@ public class Event {
     public static void event(SendPacket e) throws IOException {
         GoToTalosWS.sessions.get(e.getFace()).get(e.getUsername()).sendMessage(new BinaryMessage(e.getBuffer().array()));
         System.out.println("Send to talos: " +  Arrays.toString(e.getBuffer().array()));
+    }
+
+    @SubscribeEvent
+    public static void event(Disconnect e) throws IOException {
+        GoToTalosWS.sessions.get(e.getFace()).values().stream().forEach(s -> {
+            try {
+                s.sendMessage(new TextMessage("Disconnect"));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        GoToTalosWS.sessions.remove(e.getFace());
     }
 
 }

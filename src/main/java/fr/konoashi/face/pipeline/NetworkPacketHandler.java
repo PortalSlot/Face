@@ -3,6 +3,8 @@ package fr.konoashi.face.pipeline;
 import fr.konoashi.face.ClientConn;
 import fr.konoashi.face.Face;
 import fr.konoashi.face.event.impl.ConnEstablishedC2P;
+import fr.konoashi.face.event.impl.Disconnect;
+import fr.konoashi.face.event.impl.SendPacket;
 import fr.konoashi.face.network.PacketBuffer;
 import fr.konoashi.face.network.ProtocolState;
 import fr.konoashi.face.util.AuthUtils;
@@ -17,6 +19,7 @@ import javax.crypto.SecretKey;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.PublicKey;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -111,9 +114,27 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        server.getProxyServer().getClientsConnectedOnProxy().remove(server); //Conn removed
-        this.server.disconnect();
+        if (this.server.getState() == ProtocolState.PLAY) {
+            this.server.setState(ProtocolState.HANDSHAKING);
+            System.out.println("POPBPOOBI");
+            new Disconnect(this.server.getUsername(), this.server.getProxyServer().getProxyId(), "Disconnect", this.server.getProxyServer()).call(); // bruh when handshake is finnished it trigger also this so client can't send any packet
+            server.getProxyServer().getClientsConnectedOnProxy().remove(server); //Conn removed
+            this.server.disconnect();
+        } else {
+            System.out.println("handshake normal disconn");
+        }
+
     }
+
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+
+        System.out.println(LocalDateTime.now().toString() + " handlerRemoved");
+        super.handlerRemoved(ctx);
+    }
+
+
+
 
     public void loginSuccess() {
         ByteBuf buf = Unpooled.buffer();
