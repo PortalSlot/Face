@@ -1,27 +1,19 @@
 package fr.konoashi.face.pipeline;
 
 import fr.konoashi.face.ClientConn;
-import fr.konoashi.face.Face;
-import fr.konoashi.face.event.impl.ConnEstablishedC2P;
-import fr.konoashi.face.event.impl.Disconnect;
-import fr.konoashi.face.event.impl.SendPacket;
+import fr.konoashi.face.event.impl.PlayerConnect;
+import fr.konoashi.face.event.impl.PlayerDisconnect;
 import fr.konoashi.face.network.PacketBuffer;
 import fr.konoashi.face.network.ProtocolState;
-import fr.konoashi.face.util.AuthUtils;
-import fr.konoashi.face.util.CryptUtil;
-import fr.konoashi.face.util.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import javax.crypto.SecretKey;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.UUID;
 
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
@@ -49,7 +41,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
                 String username = packetBuffer.readStringFromBuffer(16);
                 server.setUsername(username);
                 loginSuccess();
-                new ConnEstablishedC2P(username, server, server.getProxyServer()).call(); //Conn between fake server and bot client must be init here
+                new PlayerConnect(username, server, server.getProxyServer()).call(); //Conn between fake server and bot client must be init here
                 this.server.setState(ProtocolState.PLAY);
                 server.getProxyServer().getClientsConnectedOnProxy().add(server); //Conn established
 
@@ -114,23 +106,23 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        if (this.server.getState() == ProtocolState.PLAY) {
-            this.server.setState(ProtocolState.HANDSHAKING);
-            System.out.println("POPBPOOBI");
-            new Disconnect(this.server.getUsername(), this.server.getProxyServer().getProxyId(), "Disconnect", this.server.getProxyServer()).call(); // bruh when handshake is finnished it trigger also this so client can't send any packet
-            server.getProxyServer().getClientsConnectedOnProxy().remove(server); //Conn removed
-            this.server.disconnect();
-        } else {
-            System.out.println("handshake normal disconn");
-        }
+
 
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-
-        System.out.println(LocalDateTime.now().toString() + " handlerRemoved");
+        System.out.println("triggered");
         super.handlerRemoved(ctx);
+        if (this.server.getState() == ProtocolState.PLAY) {
+            this.server.setState(ProtocolState.HANDSHAKING);
+            System.out.println("POPBPOOBI");
+            new PlayerDisconnect(this.server.getUsername(), this.server.getProxyServer().getProxyId(), "Disconnect", this.server.getProxyServer()).call(); // bruh when handshake is finnished it trigger also this so client can't send any packet
+            server.getProxyServer().getClientsConnectedOnProxy().remove(server); //Conn removed
+            this.server.disconnect();
+        } else {
+            System.out.println("handshake normal disconn");
+        }
     }
 
 

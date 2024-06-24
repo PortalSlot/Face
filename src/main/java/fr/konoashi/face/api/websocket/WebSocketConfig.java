@@ -1,5 +1,6 @@
-package fr.konoashi.face.api;
+package fr.konoashi.face.api.websocket;
 
+import fr.konoashi.face.api.websocket.NewPlayerLoggedInFace;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -8,27 +9,15 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 
 @Configuration
 @EnableWebSocket
-public class ServerWebSocketConfig implements WebSocketConfigurer {
+public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler(), "/outToTalos");//
-        registry.addHandler(webSocketHandler2(), "/inToClient");//In from Talos to go to the client back
-        registry.addHandler(webSocketHandler3(), "/newPlayerLoggedInFace");//From the client
+        registry.addHandler(faceLogHandler(), "/faceLogHandler");//From the client
     }
 
     @Bean
-    public WebSocketHandler webSocketHandler() {
-        return new GoToTalosWS();
-    }
-
-    @Bean
-    public WebSocketHandler webSocketHandler2() {
-        return new BackToClientWS();
-    }
-
-    @Bean
-    public WebSocketHandler webSocketHandler3() {
+    public WebSocketHandler faceLogHandler() {
         return new NewPlayerLoggedInFace();
     }
     @Bean
